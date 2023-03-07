@@ -6,7 +6,8 @@ public class Driver : MonoBehaviour
 {
     [SerializeField] private float steerSpeed = 250f;
     [SerializeField] private float moveSpeed = 15f;
-    [SerializeField] private float speedDamp = 0.5f;
+    [SerializeField] private float collision = 10f;
+    private float speedDamp = 0.5f;
     [SerializeField] private float speedBoost = 1.5f;
     private bool damp = false;
     private float holdSpeed;
@@ -17,7 +18,6 @@ public class Driver : MonoBehaviour
     }
     void Update()
     {
-        
         float steerAmount = Input.GetAxis("Horizontal") * steerSpeed * Time.deltaTime;
         float moveAmount = Input.GetAxis("Vertical") * moveSpeed * Time.deltaTime;
         transform.Rotate(0, 0, -steerAmount);
@@ -26,13 +26,11 @@ public class Driver : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        if (!damp)
-        {
-            Debug.Log("Bonk.");
-            moveSpeed *= speedDamp;
-            damp = true;
-        }
-
+        moveSpeed = collision;
+    }
+    private void OnCollisionExit2D(Collision2D other)
+    {
+        moveSpeed = moveSpeed;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
